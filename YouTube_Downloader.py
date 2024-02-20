@@ -4,7 +4,7 @@ from pytube import YouTube
 #TODO add auto-find downloads-folder independent of platform, add playlist functionality
 #TODO customize Interface
 #TODO make app executable independent of platform, error handling if link is wrong
-#TODO 
+#TODO if http 403 error: keep trying to download
 '''
 #? function to determine downloadsfolder of device
 def Find_Download_Folder():

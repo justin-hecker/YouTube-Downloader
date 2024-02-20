@@ -5,7 +5,7 @@ from sys import platform
 from pytube import YouTube
 from tkinter import filedialog
 '''
-#TODO add auto-find downloads-folder independent of platform, add playlist functionality
+#TODO add playlist functionality
 #TODO customize Interface
 #TODO make app executable independent of platform, error handling if link is wrong
 '''

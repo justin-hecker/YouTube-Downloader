@@ -5,6 +5,11 @@ from pytube import YouTube
 #TODO customize Interface, add download finished message, add button press feedback?
 #TODO make app executable independent of platform, error handling if link is wrong
 '''
+#? function to determine downloadsfolder of device
+def Find_Download_Folder():
+    print("Placeholder")
+
+
 #* function to download a YT Video in highest res available
 def DownloadYouTubeVideo(video_url):
     # reset Progressbar in case of multiple downloads

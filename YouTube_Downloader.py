@@ -8,7 +8,6 @@ from tkinter import filedialog
 #TODO add auto-find downloads-folder independent of platform, add playlist functionality
 #TODO customize Interface
 #TODO make app executable independent of platform, error handling if link is wrong
-#TODO if http 403 error: keep trying to download
 '''
 global DOWNLOAD_FOLDER
 

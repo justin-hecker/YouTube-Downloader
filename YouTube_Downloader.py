@@ -138,7 +138,7 @@ Find_Download_Folder()
 
 
 #* add TextBox where user inputs YT-Link
-my_entry = customtkinter.CTkEntry(app, placeholder_text="Click to enter YouTube Link.. (Also dont forget to set Save location with the button below)", width=660,height=45, placeholder_text_color="white")
+my_entry = customtkinter.CTkEntry(app, placeholder_text="Click to enter YouTube Link..", width=660,height=45, placeholder_text_color="white")
 my_entry.grid(row=0, column=0, padx=20, pady=20)
 
 #* add download-percentage

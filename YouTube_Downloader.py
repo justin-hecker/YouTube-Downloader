@@ -107,6 +107,7 @@ def open_file_location():
 #* Function to download all Videos in a Playlist
 def DownloadPlaylistVideo(playlist_url):
     try:
+        x = 1
         # load playlist
         playlist = Playlist(playlist_url)
         # download playlist
@@ -131,6 +132,10 @@ def DownloadPlaylistAudio(playlist_url):
 app = customtkinter.CTk()
 app.title("YouTube Downloader")
 app.geometry("700x550")
+
+#! set download folder for downloading
+Find_Download_Folder()
+
 
 #* add TextBox where user inputs YT-Link
 my_entry = customtkinter.CTkEntry(app, placeholder_text="Click to enter YouTube Link.. (Also dont forget to set Save location with the button below)", width=660,height=45, placeholder_text_color="white")

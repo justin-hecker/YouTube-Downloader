@@ -5,10 +5,12 @@ from sys import platform as sys_platform  # Renaming the imported platform modul
 from pytube import YouTube
 from pytube import Playlist
 from tkinter import filedialog
+
 '''
 #TODO add video counter for playlist dloading
 #TODO customize Interface, make buttons smaller and next to eachother
 '''
+
 global DOWNLOAD_FOLDER
 
 #? function to determine downloadsfolder of device
@@ -116,7 +118,6 @@ def DownloadPlaylistVideo(playlist_url):
     except:
         percentage_label.configure(text="Downloading Playlist went wrong")
         
-
 #* Function to download all Videos in a Playlist as mp3
 def DownloadPlaylistAudio(playlist_url):
     try:
@@ -135,7 +136,6 @@ app.geometry("700x550")
 
 #! set download folder for downloading
 Find_Download_Folder()
-
 
 #* add TextBox where user inputs YT-Link
 my_entry = customtkinter.CTkEntry(app, placeholder_text="Click to enter YouTube Link..", width=660,height=45, placeholder_text_color="white")

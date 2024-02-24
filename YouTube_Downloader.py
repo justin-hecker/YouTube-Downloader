@@ -3,11 +3,11 @@ import customtkinter
 import os
 from sys import platform as sys_platform  # Renaming the imported platform module
 from pytube import YouTube
+from pytube import Playlist
 from tkinter import filedialog
 '''
-#TODO add playlist functionality
-#TODO customize Interface
-#TODO error handling if link is wrong
+#TODO add video counter for playlist dloading
+#TODO customize Interface, make buttons smaller and next to eachother
 '''
 global DOWNLOAD_FOLDER
 
@@ -102,15 +102,38 @@ def open_file_location():
         else:
             print("Unsupported platform")
     except:
-        percentage_label.configure(text="Save Location not set yet!")            
+        percentage_label.configure(text="Save Location not set yet!")  
+        
+#* Function to download all Videos in a Playlist
+def DownloadPlaylistVideo(playlist_url):
+    try:
+        # load playlist
+        playlist = Playlist(playlist_url)
+        # download playlist
+        for video in playlist.videos:
+            DownloadYouTubeVideo(video.watch_url)
+    except:
+        percentage_label.configure(text="Downloading Playlist went wrong")
+        
+
+#* Function to download all Videos in a Playlist as mp3
+def DownloadPlaylistAudio(playlist_url):
+    try:
+        # load playlist
+        playlist = Playlist(playlist_url)
+        # download playlist
+        for video in playlist.videos:
+            DownloadYouTubeAudio(video.watch_url)
+    except:
+        percentage_label.configure(text="Downloading Playlist went wrong")
 
 # ! initialize app window and set dimensions and Title
 app = customtkinter.CTk()
 app.title("YouTube Downloader")
-app.geometry("700x500")
+app.geometry("700x550")
 
 #* add TextBox where user inputs YT-Link
-my_entry = customtkinter.CTkEntry(app, placeholder_text="Click to enter YouTube Link..", width=660,height=45, placeholder_text_color="white")
+my_entry = customtkinter.CTkEntry(app, placeholder_text="Click to enter YouTube Link.. (Also dont forget to set Save location with the button below)", width=660,height=45, placeholder_text_color="white")
 my_entry.grid(row=0, column=0, padx=20, pady=20)
 
 #* add download-percentage
@@ -132,11 +155,19 @@ button2.grid(row=4, column=0, padx=20, pady=10, sticky="ew")
 
 #* add "Open File Location" button
 open_file_button = customtkinter.CTkButton(app, text="Open File Location", command=open_file_location, height=40, fg_color="red", hover_color="orange")
-open_file_button.grid(row=5, column=0, padx=20, pady=10, sticky="ew")
+open_file_button.grid(row=8, column=0, padx=20, pady=10, sticky="ew")
 
 # Add "Change Download Location" button
 change_location_button = customtkinter.CTkButton(app, text="Change Download Location", command=change_download_location, height=40, fg_color="red", hover_color="orange")
-change_location_button.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
+change_location_button.grid(row=7, column=0, padx=20, pady=10, sticky="ew")
+
+#* add Button in a grid that executes DownloadPlaylistVideo function when pressed
+button = customtkinter.CTkButton(app, text="Download Playlist (Video)", command=lambda: DownloadPlaylistVideo(my_entry.get()), height=40, fg_color="red", hover_color="orange")
+button.grid(row=5, column=0, padx=20, pady=10, sticky="ew")
+
+#* add Button to download only MP3
+button2 = customtkinter.CTkButton(app, text="Download Playlist (Audio)", command=lambda: DownloadPlaylistAudio(my_entry.get()), height=40, fg_color="red", hover_color="orange")
+button2.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
 
 # ! keeps window open until its closed
 app.mainloop()

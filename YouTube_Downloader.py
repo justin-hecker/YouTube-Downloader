@@ -1,14 +1,13 @@
 import subprocess
 import customtkinter
 import os
-from sys import platform
+from sys import platform as sys_platform  # Renaming the imported platform module
 from pytube import YouTube
 from tkinter import filedialog
 '''
-#TODO add auto-find downloads-folder independent of platform, add playlist functionality
+#TODO add playlist functionality
 #TODO customize Interface
-#TODO make app executable independent of platform, error handling if link is wrong
-#TODO if http 403 error: keep trying to download
+#TODO error handling if link is wrong
 '''
 global DOWNLOAD_FOLDER
 
@@ -16,11 +15,11 @@ global DOWNLOAD_FOLDER
 def Find_Download_Folder():
     global DOWNLOAD_FOLDER
     # Initialize download folder to default location
-    if platform == "win32":  # Windows
+    if sys_platform == "win32":  # Windows
         DOWNLOAD_FOLDER = os.path.join(os.environ.get('USERPROFILE'), 'Downloads')
-    elif platform == "darwin":  # macOS
+    elif sys_platform == "darwin":  # macOS
         DOWNLOAD_FOLDER = os.path.join(os.path.expanduser('~'), 'Downloads')
-    elif platform.startswith('linux'):  # Linux
+    elif sys_platform.startswith('linux'):  # Linux
         DOWNLOAD_FOLDER = os.path.join(os.path.expanduser('~'), 'Downloads')
     else:
         DOWNLOAD_FOLDER = None  # Unsupported platform
@@ -30,38 +29,46 @@ def change_download_location():
     global DOWNLOAD_FOLDER
     new_download_folder = filedialog.askdirectory()
     DOWNLOAD_FOLDER = new_download_folder
+    percentage_label.configure(text="Save Location set!")
 
 #* function to download a YT Video in highest res available
 def DownloadYouTubeVideo(video_url):
-    # reset Progressbar in case of multiple downloads
-    progressbar.set(0)
-    progressbar.update()
-    # get video details
-    vid = YouTube(video_url, on_progress_callback=on_progress)
-    # Get the highest resolution stream available
-    stream = vid.streams.get_highest_resolution()
-    # Sanitize the video title to remove invalid characters
-    sanitized_title = "".join(x for x in vid.title if x.isalnum() or x in (' ', '.', '_', '-'))
-    # Download the video to the specified output path
-    file_path = os.path.join(DOWNLOAD_FOLDER, f"{sanitized_title}.mp4")
-    #stream.download(filename=f"{vid.title}.mp4", output_path=DOWNLOAD_FOLDER) 
-    stream.download(filename=file_path)
+    try:
+        # reset Progressbar in case of multiple downloads
+        progressbar.set(0)
+        progressbar.update()
+        # get video details
+        vid = YouTube(video_url, on_progress_callback=on_progress)
+        # Get the highest resolution stream available
+        stream = vid.streams.get_highest_resolution()
+        # Sanitize the video title to remove invalid characters
+        sanitized_title = "".join(x for x in vid.title if x.isalnum() or x in (' ', '.', '_', '-'))
+        # Download the video to the specified output path
+        file_path = os.path.join(DOWNLOAD_FOLDER, f"{sanitized_title}.mp4")
+        #stream.download(filename=f"{vid.title}.mp4", output_path=DOWNLOAD_FOLDER) 
+        stream.download(filename=file_path)
+    except:
+        #TODO ADD display invalid link! (make sure its a valid YT Link, and not age restricted)
+        percentage_label.configure(text="Invalid link (make sure its a valid YT Link, and the Video is not age restricted)")    
   
 #* function to download only Audio from a video
 def DownloadYouTubeAudio(video_url):
-    # reset progressbar in case of multiple downloads
-    progressbar.set(0)   
-    progressbar.update()
-    # get video details
-    vid = YouTube(video_url, on_progress_callback=on_progress)
-    # filter video to only stream Audio
-    stream = vid.streams.filter(only_audio=True).first()
-    sanitized_title = "".join(x for x in vid.title if x.isalnum() or x in (' ', '.', '_', '-'))
-    # Download the video to the specified output path
-    file_path = os.path.join(DOWNLOAD_FOLDER, f"{sanitized_title}.mp3")
-    #stream.download(filename=f"{vid.title}.mp3", output_path=DOWNLOAD_FOLDER) 
-    stream.download(filename=file_path)
-
+    try:   
+        # reset progressbar in case of multiple downloads
+        progressbar.set(0)   
+        progressbar.update()
+        # get video details
+        vid = YouTube(video_url, on_progress_callback=on_progress)
+        # filter video to only stream Audio
+        stream = vid.streams.filter(only_audio=True).first()
+        sanitized_title = "".join(x for x in vid.title if x.isalnum() or x in (' ', '.', '_', '-'))
+        # Download the video to the specified output path
+        file_path = os.path.join(DOWNLOAD_FOLDER, f"{sanitized_title}.mp3")
+        #stream.download(filename=f"{vid.title}.mp3", output_path=DOWNLOAD_FOLDER) 
+        stream.download(filename=file_path)
+    except:
+        percentage_label.configure(text="Invalid link (make sure its a valid YT Link, and the Video is not age restricted)")    
+            
 #* function to calculate download-percentage
 def on_progress(stream, chunk, bytes_remaining):
     # get toal size and remaining bytes from YouTube class from pytube
@@ -84,10 +91,18 @@ def on_progress(stream, chunk, bytes_remaining):
     progressbar.set(float(percentage_of_completion)/100)
     progressbar.update()
 
-# * function to open save location
+# function to open save location
 def open_file_location():
-    global DOWNLOAD_FOLDER
-    subprocess.Popen(f'explorer "{os.path.abspath(DOWNLOAD_FOLDER)}"', shell=True)
+    try:
+        global DOWNLOAD_FOLDER
+        if sys_platform == 'win32':  # Checking the value of the platform string
+            subprocess.Popen(f'explorer "{os.path.abspath(DOWNLOAD_FOLDER)}"', shell=True)
+        elif sys_platform == 'darwin':  # macOS
+            subprocess.Popen(['open', DOWNLOAD_FOLDER])
+        else:
+            print("Unsupported platform")
+    except:
+        percentage_label.configure(text="Save Location not set yet!")            
 
 # ! initialize app window and set dimensions and Title
 app = customtkinter.CTk()

@@ -47,17 +47,17 @@ def DownloadYouTubeVideo(video_url):
         sanitized_title = "".join(x for x in vid.title if x.isalnum() or x in (' ', '.', '_', '-'))
         # Download the video to the specified output path
         file_path = os.path.join(DOWNLOAD_FOLDER, f"{sanitized_title}.mp4")
-        #stream.download(filename=f"{vid.title}.mp4", output_path=DOWNLOAD_FOLDER) 
+        #stream.download(filename=f"{vid.title}.mp4", output_path=DOWNLOAD_FOLDER)
         stream.download(filename=file_path)
     except:
         #TODO ADD display invalid link! (make sure its a valid YT Link, and not age restricted)
-        percentage_label.configure(text="Invalid link (make sure its a valid YT Link, and the Video is not age restricted)")    
-  
+        percentage_label.configure(text="Invalid link (make sure its a valid YT Link, and the Video is not age restricted)")
+
 #* function to download only Audio from a video
 def DownloadYouTubeAudio(video_url):
-    try:   
+    try:
         # reset progressbar in case of multiple downloads
-        progressbar.set(0)   
+        progressbar.set(0)
         progressbar.update()
         # get video details
         vid = YouTube(video_url, on_progress_callback=on_progress)
@@ -66,11 +66,11 @@ def DownloadYouTubeAudio(video_url):
         sanitized_title = "".join(x for x in vid.title if x.isalnum() or x in (' ', '.', '_', '-'))
         # Download the video to the specified output path
         file_path = os.path.join(DOWNLOAD_FOLDER, f"{sanitized_title}.mp3")
-        #stream.download(filename=f"{vid.title}.mp3", output_path=DOWNLOAD_FOLDER) 
+        #stream.download(filename=f"{vid.title}.mp3", output_path=DOWNLOAD_FOLDER)
         stream.download(filename=file_path)
     except:
-        percentage_label.configure(text="Invalid link (make sure its a valid YT Link, and the Video is not age restricted)")    
-            
+        percentage_label.configure(text="Invalid link (make sure its a valid YT Link, and the Video is not age restricted)")
+
 #* function to calculate download-percentage
 def on_progress(stream, chunk, bytes_remaining):
     # get toal size and remaining bytes from YouTube class from pytube
@@ -85,10 +85,10 @@ def on_progress(stream, chunk, bytes_remaining):
         percentage_label.configure(text="Download Complete!")
         percentage_label.update()
         download_complete = True
-    else:    
+    else:
         percentage_label.configure(text="Downloading... (" + per + "%)")
         percentage_label.update()
-    
+
     # update progress bar
     progressbar.set(float(percentage_of_completion)/100)
     progressbar.update()
@@ -104,8 +104,8 @@ def open_file_location():
         else:
             print("Unsupported platform")
     except:
-        percentage_label.configure(text="Save Location not set yet!")  
-        
+        percentage_label.configure(text="Save Location not set yet!")
+
 #* Function to download all Videos in a Playlist
 def DownloadPlaylistVideo(playlist_url):
     try:
@@ -117,7 +117,7 @@ def DownloadPlaylistVideo(playlist_url):
             DownloadYouTubeVideo(video.watch_url)
     except:
         percentage_label.configure(text="Downloading Playlist went wrong")
-        
+
 #* Function to download all Videos in a Playlist as mp3
 def DownloadPlaylistAudio(playlist_url):
     try:
@@ -176,4 +176,3 @@ button2.grid(row=6, column=0, padx=20, pady=10, sticky="ew")
 
 # ! keeps window open until its closed
 app.mainloop()
-

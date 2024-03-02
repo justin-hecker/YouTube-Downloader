@@ -7,8 +7,7 @@ from pytube import Playlist
 from tkinter import filedialog
 
 '''
-#TODO add video counter for playlist dloading
-#TODO customize Interface, make buttons smaller and next to eachother
+
 '''
 
 global DOWNLOAD_FOLDER
@@ -50,7 +49,6 @@ def DownloadYouTubeVideo(video_url):
         #stream.download(filename=f"{vid.title}.mp4", output_path=DOWNLOAD_FOLDER)
         stream.download(filename=file_path)
     except:
-        #TODO ADD display invalid link! (make sure its a valid YT Link, and not age restricted)
         percentage_label.configure(text="Invalid link (make sure its a valid YT Link, and the Video is not age restricted)")
 
 #* function to download only Audio from a video
@@ -109,7 +107,6 @@ def open_file_location():
 #* Function to download all Videos in a Playlist
 def DownloadPlaylistVideo(playlist_url):
     try:
-        x = 1
         # load playlist
         playlist = Playlist(playlist_url)
         # download playlist
